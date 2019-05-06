@@ -6,7 +6,14 @@
 */
 
 #include <string.h>
+#include <stdio.h>
 #include "my_arp_spoof.h"
+
+void usage(const char *name)
+{
+    printf("Usage: %s source_ip destination_ip interface " \
+    "[--printBroadcast] [--printSpoof] mac\n", name);
+}
 
 static int parse_ip_iface(arg_t *arg, char **av)
 {

@@ -21,5 +21,6 @@ typedef struct {
 } arg_t;
 
 int parsing(arg_t *arg, int ac, char **av);
+void usage(const char *name);
 
 #endif
