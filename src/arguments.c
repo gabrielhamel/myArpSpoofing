@@ -5,38 +5,8 @@
 ** arguments
 */
 
-#include <sys/types.h>
-#include <ifaddrs.h>
-#include <regex.h>
 #include <string.h>
 #include "my_arp_spoof.h"
-
-static int is_valid_ip(const char *str)
-{
-    int res;
-    regex_t preg = {0};
-    char *str_regex = "^[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}$";
-
-    if (regcomp(&preg, str_regex, REG_NOSUB | REG_EXTENDED) == -1)
-        return (RETURN_FAILURE);
-    res = regexec(&preg, str, 0, NULL, 0);
-    regfree(&preg);
-    return (res);
-}
-
-static int is_valid_interface(const char *str)
-{
-    struct ifaddrs *addr = NULL;
-    struct ifaddrs *tmp = NULL;
-
-    if (getifaddrs(&addr) == -1)
-        return (RETURN_FAILURE);
-    for (tmp = addr; tmp != NULL; tmp = tmp->ifa_next)
-        if (!strcmp(str, tmp->ifa_name) && tmp->ifa_addr->sa_family
-        == AF_INET)
-            return (RETURN_SUCCESS);
-    return (RETURN_FAILURE);
-}
 
 static int parse_ip_iface(arg_t *arg, char **av)
 {
@@ -44,17 +14,17 @@ static int parse_ip_iface(arg_t *arg, char **av)
         switch (i) {
             case 1:
                 arg->src_ip = av[i];
-                if (is_valid_ip(av[i]) == RETURN_FAILURE)
+                if (is_valid_ip(av[i]))
                     return (RETURN_FAILURE);
             break;
             case 2:
                 arg->dest_ip = av[i];
-                if (is_valid_ip(av[i]) == RETURN_FAILURE)
+                if (is_valid_ip(av[i]))
                     return (RETURN_FAILURE);
             break;
             case 3:
                 arg->iface = av[i];
-                if (is_valid_interface(av[i]) == RETURN_FAILURE)
+                if (is_valid_interface(av[i]))
                     return (RETURN_FAILURE);
             break;
         }
@@ -65,5 +35,16 @@ int parsing(arg_t *arg, int ac, char **av)
 {
     if (ac < 4 || ac > 7 || parse_ip_iface(arg, av) == RETURN_FAILURE)
         return (RETURN_FAILURE);
+    for (int i = 4; i < ac; i++)
+        if (!strcmp(av[i], "--printBroadcast"))
+            arg->print_broadcast = true;
+        else if (!strcmp(av[i], "--printSpoof") && i + 1 < ac) {
+            if (is_valid_mac(av[i + 1]))
+                return (RETURN_FAILURE);
+            arg->print_spoof = true;
+            arg->mac_addr = av[++i];
+        }
+        else
+            return (RETURN_FAILURE);
     return (RETURN_SUCCESS);
 }

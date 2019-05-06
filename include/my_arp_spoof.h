@@ -15,6 +15,9 @@ typedef struct {
     char *src_ip;
     char *dest_ip;
     char *iface;
+    bool print_broadcast;
+    bool print_spoof;
+    char *mac_addr;
 } arg_t;
 
 int parsing(arg_t *arg, int ac, char **av);
