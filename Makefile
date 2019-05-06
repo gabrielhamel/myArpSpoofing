@@ -9,7 +9,8 @@ NAME =		myARPspoof
 
 CFLAGS +=	-I$(INC_DIR) -W -Wall -Wextra
 
-SRC =		$(SRC_DIR)/main.c
+SRC =		$(SRC_DIR)/main.c \
+			$(SRC_DIR)/arguments.c
 
 SRC_DIR =	$(realpath src)
 

@@ -5,11 +5,13 @@
 ** main
 */
 
-#include "error.h"
+#include "my_arp_spoof.h"
 
 int main(int ac, char **av)
 {
-    (void)ac;
-    (void)av;
+    arg_t arg = {0};
+
+    if (parsing(&arg, ac, av) == -1)
+        return (EXIT_FAILURE);
     return (EXIT_SUCCESS);
 }

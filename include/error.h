@@ -16,4 +16,7 @@
 
 #define EXIT_FAILURE 84
 
+#define RETURN_SUCCESS EXIT_SUCCESS
+#define RETURN_FAILURE -1
+
 #endif
