@@ -6,6 +6,7 @@
 */
 
 #include <string.h>
+#include <stdio.h>
 #include <net/ethernet.h>
 #include "my_arp_spoof.h"
 
@@ -30,7 +31,17 @@ static size_t fill_eth(sock_t *sock, struct ethhdr *eth)
     return (sizeof(struct ethhdr));
 }
 
-ssize_t send_arp(sock_t *sock)
+static void print_packet(uint8_t *packet, size_t size)
+{
+    for (size_t i = 0; i < size; i++) {
+        printf("%02x", packet[i]);
+        if (i != size - 1)
+            printf(" ");
+    }
+    printf("\n");
+}
+
+ssize_t send_arp(sock_t *sock, arg_t *arg)
 {
     uint8_t packet[ETH_DATA_LEN] = {0};
     size_t size = 0;
@@ -38,6 +49,10 @@ ssize_t send_arp(sock_t *sock)
     size += fill_arp(sock, (myarp_t *)(packet +
     sizeof(struct ethhdr)));
     size += fill_eth(sock, (struct ethhdr *)packet);
+    if (arg->print_broadcast == true) {
+        print_packet(packet, size);
+        return (0);
+    }
     return (sendto(sock->fd, packet, size, 0, (struct sockaddr *)
     &(sock->dest_arp), sizeof(struct sockaddr_ll)));
 }

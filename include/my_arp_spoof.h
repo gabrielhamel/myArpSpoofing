@@ -45,7 +45,7 @@ void usage(const char *name);
 struct sockaddr_in get_broadcast_ip(const char *iface);
 int get_mac_addr(uint8_t *buf, const char *iface);
 int init_socket(sock_t *sock, arg_t *arg);
-ssize_t send_arp(sock_t *sock);
+ssize_t send_arp(sock_t *sock, arg_t *arg);
 ssize_t rcv_arp(sock_t *sock, uint8_t *buf);
 
 #endif

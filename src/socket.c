@@ -14,16 +14,11 @@
 #include <netinet/in.h>
 #include "my_arp_spoof.h"
 
-int init_socket(sock_t *sock, arg_t *arg)
+static void fill_info(sock_t *sock, arg_t *arg, uint8_t *mac)
 {
-    uint8_t mac[8] = {0};
-    socklen_t size = sizeof(struct sockaddr_ll);
     unsigned char broadcast[ETHER_ADDR_LEN] = {0xff, 0xff, 0xff, 0xff,
     0xff, 0xff};
 
-    sock->fd = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ARP));
-    if (sock->fd == -1 || get_mac_addr(mac, arg->iface) == RETURN_FAILURE)
-        return (RETURN_FAILURE);
     sock->dest_arp.sll_family = AF_PACKET;
     sock->dest_arp.sll_halen = ETHER_ADDR_LEN;
     sock->dest_arp.sll_protocol = htons(ETH_P_ARP);   
@@ -33,7 +28,20 @@ int init_socket(sock_t *sock, arg_t *arg)
     memcpy(sock->src_arp.sll_addr, mac, ETHER_ADDR_LEN);
     inet_aton(arg->dest_ip, &sock->dest_ip);
     inet_aton(arg->src_ip, &sock->src_ip);
-    if (bind(sock->fd, (struct sockaddr *)&sock->src_arp, size) == -1)
+}
+
+int init_socket(sock_t *sock, arg_t *arg)
+{
+    uint8_t mac[8] = {0};
+    socklen_t size = sizeof(struct sockaddr_ll);
+
+    if (arg->print_broadcast == false)
+        sock->fd = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ARP));
+    if (sock->fd == -1 || get_mac_addr(mac, arg->iface) == RETURN_FAILURE)
         return (RETURN_FAILURE);
+    fill_info(sock, arg, mac);
+    if (arg->print_broadcast == false)
+        if (bind(sock->fd, (struct sockaddr *)&sock->src_arp, size) == -1)
+            return (RETURN_FAILURE);
     return (RETURN_SUCCESS);
 }
