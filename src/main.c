@@ -5,7 +5,6 @@
 ** main
 */
 
-#include <stdio.h>
 #include "my_arp_spoof.h"
 
 int main(int ac, char **av)
@@ -19,6 +18,5 @@ int main(int ac, char **av)
     }
     if (init_socket(&sock, &arg) == RETURN_FAILURE)
         return (EXIT_FAILURE);
-    send_arp(&sock);
     return (EXIT_SUCCESS);
 }
