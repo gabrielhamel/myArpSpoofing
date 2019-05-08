@@ -38,7 +38,7 @@ int get_mac_addr(uint8_t *buf, const char *iface)
 {
     struct ifaddrs *addr = NULL;
     struct ifreq req = {0};
-    int sock = socket(PF_INET, SOCK_DGRAM, 0);
+    int sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_IP);
     struct ifaddrs *tmp = NULL;
 
     if (getifaddrs(&addr) == -1)

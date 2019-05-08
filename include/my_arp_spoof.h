@@ -10,6 +10,7 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include <netpacket/packet.h>
 #include <netinet/in.h>
 #include "error.h"
 
@@ -24,9 +25,10 @@ typedef struct {
 
 typedef struct {
     int fd;
-    uint8_t src_mac[6];
-    struct sockaddr_in src_ip;
-    struct sockaddr_in dest_ip;
+    struct in_addr src_ip;
+    struct in_addr dest_ip;
+    struct sockaddr_ll src_arp;
+    struct sockaddr_ll dest_arp;
 } sock_t;
 
 int parsing(arg_t *arg, int ac, char **av);
