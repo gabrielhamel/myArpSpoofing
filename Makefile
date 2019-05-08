@@ -15,7 +15,8 @@ SRC =		$(SRC_DIR)/main.c \
 			$(SRC_DIR)/broadcast.c \
 			$(SRC_DIR)/socket.c \
 			$(SRC_DIR)/send.c \
-			$(SRC_DIR)/rcv.c
+			$(SRC_DIR)/rcv.c \
+			$(SRC_DIR)/spoofed.c
 
 SRC_DIR =	$(realpath src)
 

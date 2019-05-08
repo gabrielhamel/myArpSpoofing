@@ -35,12 +35,12 @@ int init_socket(sock_t *sock, arg_t *arg)
     uint8_t mac[8] = {0};
     socklen_t size = sizeof(struct sockaddr_ll);
 
-    if (arg->print_broadcast == false)
+    if (arg->print_broadcast == false && arg->print_spoof == false)
         sock->fd = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ARP));
     if (sock->fd == -1 || get_mac_addr(mac, arg->iface) == RETURN_FAILURE)
         return (RETURN_FAILURE);
     fill_info(sock, arg, mac);
-    if (arg->print_broadcast == false)
+    if (arg->print_broadcast == false && arg->print_spoof == false)
         if (bind(sock->fd, (struct sockaddr *)&sock->src_arp, size) == -1)
             return (RETURN_FAILURE);
     return (RETURN_SUCCESS);

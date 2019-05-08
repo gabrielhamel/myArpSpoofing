@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2019
 ** NWP_myarpspoof_2018
 ** File description:
-** send
+** spoofed
 */
 
 #include <string.h>
@@ -31,28 +31,18 @@ static size_t fill_eth(sock_t *sock, struct ethhdr *eth)
     return (sizeof(struct ethhdr));
 }
 
-void print_packet(uint8_t *packet, size_t size)
+ssize_t build_spoofed(sock_t *sock, uint8_t *buf, arg_t *arg)
 {
-    for (size_t i = 0; i < size; i++) {
-        printf("%02x", packet[i]);
-        if (i != size - 1)
-            printf(" ");
-    }
-    printf("\n");
-}
-
-ssize_t send_arp(sock_t *sock, arg_t *arg)
-{
-    uint8_t packet[ETH_DATA_LEN] = {0};
     size_t size = 0;
+    uint8_t mac[6] = {0};
 
-    size += fill_arp(sock, (myarp_t *)(packet +
-    sizeof(struct ethhdr)));
-    size += fill_eth(sock, (struct ethhdr *)packet);
-    if (arg->print_broadcast == true) {
-        print_packet(packet, size);
-        return (0);
+    if (arg->print_spoof == true) {
+        sscanf(arg->mac_addr, "%hhx:%hhx:%hhx:%hhx:%hhx:%hhx",
+        &mac[0], &mac[1], &mac[2], &mac[3], &mac[4], &mac[5]);
+        memcpy(&sock->dest_arp.sll_addr, mac, 6);
     }
-    return (sendto(sock->fd, packet, size, 0, (struct sockaddr *)
-    &(sock->dest_arp), sizeof(struct sockaddr_ll)));
+    size += fill_arp(sock, (myarp_t *)(buf +
+    sizeof(struct ethhdr)));
+    size += fill_eth(sock, (struct ethhdr *)buf);
+    return (size);
 }

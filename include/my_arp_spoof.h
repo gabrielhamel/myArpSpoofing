@@ -47,5 +47,7 @@ int get_mac_addr(uint8_t *buf, const char *iface);
 int init_socket(sock_t *sock, arg_t *arg);
 ssize_t send_arp(sock_t *sock, arg_t *arg);
 ssize_t rcv_arp(sock_t *sock, uint8_t *buf);
+ssize_t build_spoofed(sock_t *sock, uint8_t *buf, arg_t *arg);
+void print_packet(uint8_t *packet, size_t size);
 
 #endif

@@ -45,8 +45,8 @@ int is_valid_mac(const char *str)
 {
     int res;
     regex_t preg = {0};
-    char *str_regex = "^[\\da-fA-F]{2}:[\\da-fA-F]{2}:[\\da-fA-F]{2}:" \
-    "[\\da-fA-F]{2}:[\\da-fA-F]{2}:[\\da-fA-F]{2}$";
+    char *str_regex = "^[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:" \
+    "[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}$";
 
     if (regcomp(&preg, str_regex, REG_NOSUB | REG_EXTENDED) == -1)
         return (RETURN_FAILURE);

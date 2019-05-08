@@ -52,5 +52,6 @@ ssize_t rcv_arp(sock_t *sock, uint8_t *buf)
     } while (res != 60 || !is_really_eth(sock, (struct ethhdr *)packet) ||
     !is_really_arp(sock, arp));
     memcpy(buf, arp->src_mac, ETH_ALEN);
+    memcpy(sock->dest_arp.sll_addr, buf, ETH_ALEN);
     return (res);
 }
