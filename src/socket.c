@@ -21,7 +21,7 @@ static void fill_info(sock_t *sock, arg_t *arg, uint8_t *mac)
 
     sock->dest_arp.sll_family = AF_PACKET;
     sock->dest_arp.sll_halen = ETHER_ADDR_LEN;
-    sock->dest_arp.sll_protocol = htons(ETH_P_ARP);   
+    sock->dest_arp.sll_protocol = htons(ETH_P_ARP);
     sock->dest_arp.sll_ifindex = if_nametoindex(arg->iface);
     memcpy(sock->dest_arp.sll_addr, broadcast, ETHER_ADDR_LEN);
     memcpy(&sock->src_arp, &sock->dest_arp, sizeof(struct sockaddr_ll));

