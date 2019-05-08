@@ -22,5 +22,6 @@ typedef struct {
 
 int parsing(arg_t *arg, int ac, char **av);
 void usage(const char *name);
+struct sockaddr_in get_broadcast_ip(const char *iface);
 
 #endif

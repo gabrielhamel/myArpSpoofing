@@ -11,7 +11,8 @@ CFLAGS +=	-I$(INC_DIR) -W -Wall -Wextra
 
 SRC =		$(SRC_DIR)/main.c \
 			$(SRC_DIR)/arguments.c \
-			$(SRC_DIR)/validity.c
+			$(SRC_DIR)/validity.c \
+			$(SRC_DIR)/broadcast.c
 
 SRC_DIR =	$(realpath src)
 
