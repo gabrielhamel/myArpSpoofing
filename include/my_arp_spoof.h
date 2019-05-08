@@ -9,6 +9,7 @@
 #define MY_ARP_SPOOF_H
 
 #include <stdbool.h>
+#include <stdint.h>
 #include "error.h"
 
 typedef struct {
@@ -23,5 +24,6 @@ typedef struct {
 int parsing(arg_t *arg, int ac, char **av);
 void usage(const char *name);
 struct sockaddr_in get_broadcast_ip(const char *iface);
+int get_mac_addr(uint8_t *buf, const char *iface);
 
 #endif

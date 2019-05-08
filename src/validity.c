@@ -33,8 +33,11 @@ int is_valid_interface(const char *str)
         return (RETURN_FAILURE);
     for (tmp = addr; tmp != NULL; tmp = tmp->ifa_next)
         if (!strcmp(str, tmp->ifa_name) && tmp->ifa_addr->sa_family
-        == AF_INET)
+        == AF_INET) {
+            freeifaddrs(addr);
             return (RETURN_SUCCESS);
+        }
+    freeifaddrs(addr);
     return (RETURN_FAILURE);
 }
 
