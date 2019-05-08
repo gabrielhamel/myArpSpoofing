@@ -19,6 +19,6 @@ int main(int ac, char **av)
     }
     if (init_socket(&sock, &arg) == RETURN_FAILURE)
         return (EXIT_FAILURE);
-    printf("%ld\n", send_arp(&sock));
+    send_arp(&sock);
     return (EXIT_SUCCESS);
 }
