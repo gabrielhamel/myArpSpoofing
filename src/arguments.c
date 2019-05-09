@@ -58,7 +58,6 @@ static int parse_optional_arg(int ac, char **av, arg_t *arg, int *idx)
     return (RETURN_SUCCESS);
 }
 
-
 int parsing(arg_t *arg, int ac, char **av)
 {
     if (ac < 4 || ac > 7 || parse_ip_iface(arg, av) == RETURN_FAILURE)
