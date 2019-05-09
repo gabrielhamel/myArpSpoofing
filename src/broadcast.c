@@ -10,6 +10,7 @@
 #include <linux/if_ether.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <unistd.h>
 #include <arpa/inet.h>
 #include <sys/ioctl.h>
 #include <net/if.h>
@@ -43,5 +44,6 @@ int get_mac_addr(uint8_t *buf, const char *iface)
     if (ioctl(sock, SIOCGIFHWADDR, &req) == -1)
         return (RETURN_FAILURE);
     memcpy(buf, req.ifr_hwaddr.sa_data, 6);
+    close(sock);
     return (RETURN_SUCCESS);
 }

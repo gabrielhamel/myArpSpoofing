@@ -49,7 +49,7 @@ ssize_t rcv_arp(sock_t *sock, uint8_t *buf)
     do {
         res = recvfrom(sock->fd, packet, ETH_DATA_LEN, 0,
         (struct sockaddr *)&(sock->dest_arp), &len);
-    } while (res != 60 || !is_really_eth(sock, (struct ethhdr *)packet) ||
+    } while (!is_really_eth(sock, (struct ethhdr *)packet) ||
     !is_really_arp(sock, arp));
     memcpy(buf, arp->src_mac, ETH_ALEN);
     memcpy(sock->dest_arp.sll_addr, buf, ETH_ALEN);
