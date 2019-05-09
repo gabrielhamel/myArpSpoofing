@@ -43,20 +43,28 @@ static int parse_ip_iface(arg_t *arg, char **av)
     return (RETURN_SUCCESS);
 }
 
+static int parse_optional_arg(int ac, char **av, arg_t *arg, int *idx)
+{
+    if (!strcmp(av[*idx], "--printBroadcast"))
+        arg->print_broadcast = true;
+    else if (!strcmp(av[*idx], "--printSpoof") && *idx + 1 < ac) {
+        if (is_valid_mac(av[*idx + 1]))
+            return (RETURN_FAILURE);
+        arg->print_spoof = true;
+        arg->mac_addr = av[++(*idx)];
+    }
+    else
+        return (RETURN_FAILURE);
+    return (RETURN_SUCCESS);
+}
+
+
 int parsing(arg_t *arg, int ac, char **av)
 {
     if (ac < 4 || ac > 7 || parse_ip_iface(arg, av) == RETURN_FAILURE)
         return (RETURN_FAILURE);
     for (int i = 4; i < ac; i++)
-        if (!strcmp(av[i], "--printBroadcast"))
-            arg->print_broadcast = true;
-        else if (!strcmp(av[i], "--printSpoof") && i + 1 < ac) {
-            if (is_valid_mac(av[i + 1]))
-                return (RETURN_FAILURE);
-            arg->print_spoof = true;
-            arg->mac_addr = av[++i];
-        }
-        else
+        if (parse_optional_arg(ac, av, arg, &i) == RETURN_FAILURE)
             return (RETURN_FAILURE);
     return (RETURN_SUCCESS);
 }
