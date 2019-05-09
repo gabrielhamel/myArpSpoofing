@@ -18,6 +18,7 @@ static size_t fill_arp(sock_t *sock, myarp_t *arp)
     arp->head.ar_pln = sizeof(in_addr_t);
     arp->head.ar_op = htons(ARPOP_REQUEST);
     memcpy(arp->src_mac, sock->src_arp.sll_addr, 6);
+    memcpy(arp->dest_mac, sock->dest_arp.sll_addr, 6);
     memcpy(arp->src_ip, &sock->src_ip.s_addr, 4);
     memcpy(arp->dest_ip, &sock->dest_ip.s_addr, 4);
     return (sizeof(myarp_t));
