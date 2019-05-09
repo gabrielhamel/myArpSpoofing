@@ -36,20 +36,12 @@ struct sockaddr_in get_broadcast_ip(const char *iface)
 
 int get_mac_addr(uint8_t *buf, const char *iface)
 {
-    struct ifaddrs *addr = NULL;
     struct ifreq req = {0};
     int sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_IP);
-    struct ifaddrs *tmp = NULL;
 
-    if (getifaddrs(&addr) == -1)
+    strcpy(req.ifr_name, iface);
+    if (ioctl(sock, SIOCGIFHWADDR, &req) == -1)
         return (RETURN_FAILURE);
-    for (tmp = addr; tmp != NULL; tmp = tmp->ifa_next)
-        if (!strcmp(iface, tmp->ifa_name) && tmp->ifa_addr->sa_family ==
-        AF_INET)
-            break;
-    strcpy(req.ifr_name, tmp->ifa_name);
-    ioctl(sock, SIOCGIFHWADDR, &req);
-    memcpy(buf, req.ifr_ifru.ifru_hwaddr.sa_data, 6);
-    freeifaddrs(addr);
+    memcpy(buf, req.ifr_hwaddr.sa_data, 6);
     return (RETURN_SUCCESS);
 }
